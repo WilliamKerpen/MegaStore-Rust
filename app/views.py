@@ -22,7 +22,3 @@ def index():
 
     return render_template('index.html', produtos_recomendados=produtos, ultimas_pesquisas=[termo] if termo else [])
 
-@app.after_request
-def aplicar_csp(response):
-    response.headers['Content-Security-Policy'] = "script-src 'self';"
-    return response
