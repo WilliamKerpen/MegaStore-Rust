@@ -13,7 +13,7 @@
 
   <!-- Header -->
   <header class="d-flex justify-content-between align-items-center p-3">
-    <div class="logo">megastore</div>
+    <div class="logo"><a href="{{url_for('index')}}">megastore</a></div>
     <div>
       <button class="icon-btn"><i class="bi bi-cart"></i> Carrinho</button>
       <button class="icon-btn"><i class="bi bi-person"></i> Perfil</button>
@@ -22,9 +22,9 @@
 
   <!-- Search Bar -->
   <section class="search-bar container my-4">
-    <form class="input-group">
-      <input type="text" class="form-control" placeholder="Buscar produtos...">
-      <button class="btn btn-dark" type="submit">Buscar</button>
+    <form method="POST" class="input-group">
+        <input type="text" name="termo" class="form-control" placeholder="Buscar produtos...">
+        <button class="btn btn-dark" type="submit">Buscar</button>
     </form>
   </section>
 
@@ -33,35 +33,40 @@
     <h4 class="mb-3">Produtos Recomendados</h4>
     <div class="row">
       {% for produto in produtos_recomendados %}
-      <div class="col-md-3">
-        <div class="product-card text-center">
-          <img src="{{ produto.imagem }}" alt="{{ produto.nome }}" class="img-fluid mb-2">
-          <h6>{{ produto.nome }}</h6>
-          <p class="text-muted">{{ produto.categoria }}</p>
-        </div>
-      </div>
-      {% endfor %}
+  <div class="col-md-3">
+    <div class="product-card text-center">
+      {% set imagem = produto.imagens.filter_by(is_primary=True).first() %}
+      {% if imagem %}
+        <img src="{{ url_for('static', filename='uploads/' ~ imagem.filename) }}" alt="{{ produto.nome }}" class="img-fluid mb-2">
+      {% else %}
+        <img src="{{ url_for('static', filename='images/default.png') }}" alt="Sem imagem" class="img-fluid mb-2">
+      {% endif %}
+      <h6>{{ produto.nome }}</h6>
+      <p class="text-muted">{{ produto.categoria }}</p>
+      <p class="fw-bold">R$ {{ produto.preco }}</p>
+    </div>
+  </div>
+{% endfor %}
     </div>
   </section>
 
   <!-- Últimas Pesquisas -->
   <section class="container my-5">
-    <h4 class="mb-3">Últimas Pesquisas</h4>
-    <div class="row">
-      {% for termo in ultimas_pesquisas %}
-      <div class="col-md-3">
-        <div class="search-card text-center">
-          <p>{{ termo }}</p>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </section>
+  <h4 class="mb-3">Últimas Pesquisas</h4>
+  <div class="row" id="ultimas-pesquisas">
+    <!-- JS vai preencher aqui -->
+  </div>
+</section>
 
   <!-- Footer -->
   <footer class="text-center p-4">
     <p>&copy; 2025 Megastore. Todos os direitos reservados.</p>
   </footer>
 
+
+<script src="{{ url_for('static', filename='scripts/scripts.js') }}"></script>
+
 </body>
 </html>
+
+

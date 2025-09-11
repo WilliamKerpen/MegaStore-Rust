@@ -18,5 +18,5 @@ migrate = Migrate(app, db)
 
 
 
-from app.views import homepage
+from app.views import index
 from app.models import Produtos
