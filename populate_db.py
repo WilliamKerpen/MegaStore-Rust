@@ -1,15 +1,17 @@
-from app import create_app, db
-from app.models import Produtos
+from app.models import db, Produtos, ProdutoImagem
+from main import app  # importa o app principal
 from faker import Faker
 import random
 
-CATEGORIES = ['Eletrônicos','Roupas','Livros','Móveis','Brinquedos','Esporte','Beleza','Alimentos','Ferramentas','Casa']
+CATEGORIES = [
+    'Eletrônicos', 'Roupas', 'Livros', 'Móveis', 'Brinquedos',
+    'Esporte', 'Beleza', 'Automotivo', 'Ferramentas', 'Casa'
+]
 
-def populate(n=10000, batch=500):
+def populate(n=2000, batch=200):
     fake = Faker('pt_BR')
-    app = create_app()
     with app.app_context():
-        db.create_all()
+        db.create_all()  # garante que as tabelas existam
         to_add = []
         for i in range(n):
             p = Produtos(
@@ -19,16 +21,24 @@ def populate(n=10000, batch=500):
                 descricao=fake.text(max_nb_chars=200),
                 preco=round(random.uniform(5.0, 1000.0), 2)
             )
-            to_add.append(p)
-            if len(to_add) >= batch:
-                db.session.add_all(to_add)
-                db.session.commit()
-                to_add = []
-                print(f'Inseridos {i+1} produtos...')
-        if to_add:
-            db.session.add_all(to_add)
-            db.session.commit()
-        print('População concluída.')
+            db.session.add(p)
+            db.session.flush()  # força criar o id sem commit ainda
 
-if __name__ == '__main__':
-    populate(n=10000)
+            # adiciona imagem default
+            img = ProdutoImagem(
+                produto_id=p.id,
+                filename="default.png",
+                mimetype="image/png",
+                is_primary=True
+            )
+            db.session.add(img)
+
+            if (i + 1) % batch == 0:
+                db.session.commit()
+                print(f"Inseridos {i+1} produtos...")
+
+        db.session.commit()
+        print("População concluída!")
+
+if __name__ == "__main__":
+    populate(n=2000)  # ajusta a quantidade que quiser

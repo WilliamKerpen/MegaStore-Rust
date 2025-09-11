@@ -1,15 +1,67 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>MegaStore</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-    <h1>MegaStore</h1>
-    <input type="text" id="searchBox" placeholder="Buscar produtos..." autocomplete="off">
-    <div id="suggestions"></div>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Megastore</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-    <script src="/static/js/search.js"></script>
+</head>
+<body class="d-flex flex-column">
+
+  <!-- Header -->
+  <header class="d-flex justify-content-between align-items-center p-3">
+    <div class="logo">megastore</div>
+    <div>
+      <button class="icon-btn"><i class="bi bi-cart"></i> Carrinho</button>
+      <button class="icon-btn"><i class="bi bi-person"></i> Perfil</button>
+    </div>
+  </header>
+
+  <!-- Search Bar -->
+  <section class="search-bar container my-4">
+    <form class="input-group">
+      <input type="text" class="form-control" placeholder="Buscar produtos...">
+      <button class="btn btn-dark" type="submit">Buscar</button>
+    </form>
+  </section>
+
+  <!-- Produtos Recomendados -->
+  <section class="container">
+    <h4 class="mb-3">Produtos Recomendados</h4>
+    <div class="row">
+      {% for produto in produtos_recomendados %}
+      <div class="col-md-3">
+        <div class="product-card text-center">
+          <img src="{{ produto.imagem }}" alt="{{ produto.nome }}" class="img-fluid mb-2">
+          <h6>{{ produto.nome }}</h6>
+          <p class="text-muted">{{ produto.categoria }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Últimas Pesquisas -->
+  <section class="container my-5">
+    <h4 class="mb-3">Últimas Pesquisas</h4>
+    <div class="row">
+      {% for termo in ultimas_pesquisas %}
+      <div class="col-md-3">
+        <div class="search-card text-center">
+          <p>{{ termo }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="text-center p-4">
+    <p>&copy; 2025 Megastore. Todos os direitos reservados.</p>
+  </footer>
+
 </body>
 </html>
