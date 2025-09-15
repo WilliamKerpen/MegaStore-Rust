@@ -1,8 +1,8 @@
-"""Criacao do  db com Produtos e imagens
+"""recriacao do banco de dados, antigo excluido 
 
-Revision ID: 96be4dd3db3e
+Revision ID: 7ffdbf634544
 Revises: 
-Create Date: 2025-09-11 22:28:21.852010
+Create Date: 2025-09-15 21:54:29.259603
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '96be4dd3db3e'
+revision = '7ffdbf634544'
 down_revision = None
 branch_labels = None
 depends_on = None
