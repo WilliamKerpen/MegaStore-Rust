@@ -43,3 +43,18 @@ a{
     color: white;
     cursor: pointer;
 }
+
+.hidden {
+  display: none;
+}
+
+#product-detail {
+  position: fixed;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 20px;
+  z-index: 1000;
+}

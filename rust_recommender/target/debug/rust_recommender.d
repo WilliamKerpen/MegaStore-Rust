@@ -1,0 +1,1 @@
+C:\Users\willi\OneDrive\Área\ de\ Trabalho\FECAF\Data\ Structure\ Strategy\ and\ Implementatio\megastore\rust_recommender\target\debug\rust_recommender.exe: C:\Users\willi\OneDrive\Área\ de\ Trabalho\FECAF\Data\ Structure\ Strategy\ and\ Implementatio\megastore\rust_recommender\src\main.rs

@@ -2,7 +2,7 @@ from app import db
 
 '''
 flask db init
-flask db migrate -m "Add product images"
+flask db migrate -m ""
 flask db upgrade
 '''
 

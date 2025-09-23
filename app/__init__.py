@@ -20,5 +20,5 @@ def aplicar_csp(response):
     response.headers['Content-Security-Policy'] = "script-src 'self';"
     return response
 
-from app.views import index
+from app import views
 from app.models import Produtos

@@ -42,3 +42,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log("JS carregado com sucesso!");
 });
+
+
+function showProductDetail(productId) {
+  // Simulação de dados
+  const productData = {
+    sofa: {
+      image: "sofa-large.jpg",
+      title: "Domusensen Sofá 2 lugares",
+      description: "Sofá compacto com tecido teddy fleece, ideal para sala, quarto ou escritório.",
+      price: "€151,14"
+    }
+  };
+
+  const product = productData[productId];
+  document.getElementById("detail-image").src = product.image;
+  document.getElementById("detail-title").textContent = product.title;
+  document.getElementById("detail-description").textContent = product.description;
+  document.getElementById("detail-price").textContent = product.price;
+
+  document.getElementById("product-detail").classList.remove("hidden");
+}
+
+function closeDetail() {
+  document.getElementById("product-detail").classList.add("hidden");
+}

@@ -40,17 +40,19 @@
     <div class="row">
       {% for produto in produtos_recomendados %}
       <div class="col-md-3">
-        <div class="product-card text-center">
-          {% set imagem = produto.imagens.filter_by(is_primary=True).first() %}
-          {% if imagem %}
-            <img src="{{ url_for('static', filename='uploads/' ~ imagem.filename) }}" alt="{{ produto.nome }}" class="img-fluid mb-2">
-          {% else %}
-            <img src="{{ url_for('static', filename='images/default.png') }}" alt="Sem imagem" class="img-fluid mb-2">
-          {% endif %}
-          <h6>{{ produto.nome }}</h6>
-          <p class="text-muted">{{ produto.categoria }}</p>
-          <p class="fw-bold">R$ {{ produto.preco }}</p>
-        </div>
+        <a href="{{ url_for('produto_details', id=produto.id) }}" class="text-decoration-none text-dark">
+          <div class="product-card text-center">
+            {% set imagem = produto.imagens.filter_by(is_primary=True).first() %}
+            {% if imagem %}
+              <img src="{{ url_for('static', filename='uploads/' ~ imagem.filename) }}" alt="{{ produto.nome }}" class="img-fluid mb-2">
+            {% else %}
+              <img src="{{ url_for('static', filename='images/default.png') }}" alt="Sem imagem" class="img-fluid mb-2">
+            {% endif %}
+            <h6>{{ produto.nome }}</h6>
+            <p class="text-muted">{{ produto.categoria }}</p>
+            <p class="fw-bold">R$ {{ produto.preco }}</p>
+          </div>
+        </a>
       </div>
       {% endfor %}
     </div>

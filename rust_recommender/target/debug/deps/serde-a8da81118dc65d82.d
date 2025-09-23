@@ -1,0 +1,12 @@
+C:\Users\willi\OneDrive\Área de Trabalho\FECAF\Data Structure Strategy and Implementatio\megastore\rust_recommender\target\debug\deps\serde-a8da81118dc65d82.d: C:\Users\willi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.225\src\lib.rs C:\Users\willi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.225\src\integer128.rs C:\Users\willi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.225\src\private\mod.rs C:\Users\willi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.225\src\private\de.rs C:\Users\willi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.225\src\private\ser.rs C:\Users\willi\OneDrive\Área\ de\ Trabalho\FECAF\Data\ Structure\ Strategy\ and\ Implementatio\megastore\rust_recommender\target\debug\build\serde-68f2aaf053c2a5e4\out/private.rs
+
+C:\Users\willi\OneDrive\Área de Trabalho\FECAF\Data Structure Strategy and Implementatio\megastore\rust_recommender\target\debug\deps\libserde-a8da81118dc65d82.rmeta: C:\Users\willi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.225\src\lib.rs C:\Users\willi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.225\src\integer128.rs C:\Users\willi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.225\src\private\mod.rs C:\Users\willi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.225\src\private\de.rs C:\Users\willi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.225\src\private\ser.rs C:\Users\willi\OneDrive\Área\ de\ Trabalho\FECAF\Data\ Structure\ Strategy\ and\ Implementatio\megastore\rust_recommender\target\debug\build\serde-68f2aaf053c2a5e4\out/private.rs
+
+C:\Users\willi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.225\src\lib.rs:
+C:\Users\willi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.225\src\integer128.rs:
+C:\Users\willi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.225\src\private\mod.rs:
+C:\Users\willi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.225\src\private\de.rs:
+C:\Users\willi\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.225\src\private\ser.rs:
+C:\Users\willi\OneDrive\Área\ de\ Trabalho\FECAF\Data\ Structure\ Strategy\ and\ Implementatio\megastore\rust_recommender\target\debug\build\serde-68f2aaf053c2a5e4\out/private.rs:
+
+# env-dep:OUT_DIR=C:\\Users\\willi\\OneDrive\\Área de Trabalho\\FECAF\\Data Structure Strategy and Implementatio\\megastore\\rust_recommender\\target\\debug\\build\\serde-68f2aaf053c2a5e4\\out
