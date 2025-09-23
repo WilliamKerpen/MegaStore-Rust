@@ -47,13 +47,38 @@ fn recomendar_por_nome(mapa: &HashMap<String, Produto>, termo: &str) -> Vec<Prod
         .collect()
 }
 
-fn recomendar_por_categoria(mapa: &HashMap<String, Produto>, categoria: &str) -> Vec<Produto> {
-    mapa.values()
-        .filter(|p| p.categoria == categoria)
-        .cloned()
-        .take(4)
-        .collect()
+fn recomendar_por_categoria(mapa: &HashMap<String, Produto>, termo: &str) -> Vec<Produto> {
+    let termo_normalizado = termo.to_lowercase();
+
+    // Verifica se o termo é uma categoria conhecida
+    let categorias: std::collections::HashSet<String> = mapa
+        .values()
+        .map(|p| p.categoria.to_lowercase())
+        .collect();
+
+    if categorias.contains(&termo_normalizado) {
+        return mapa
+            .values()
+            .filter(|p| p.categoria.to_lowercase() == termo_normalizado)
+            .cloned()
+            .take(4)
+            .collect();
+    }
+
+    // Se não for uma categoria, tenta encontrar um produto com esse nome
+    if let Some(produto) = mapa.get(&termo) {
+        return mapa
+            .values()
+            .filter(|p| p.categoria == produto.categoria && p.nome != produto.nome)
+            .cloned()
+            .take(4)
+            .collect();
+    }
+
+    vec![]
 }
+
+
 
 async fn recomendar(Path(termo): Path<String>, mapa: Arc<HashMap<String, Produto>>) -> Json<Vec<Produto>> {
     let mut recomendados = recomendar_por_nome(&mapa, &termo);
