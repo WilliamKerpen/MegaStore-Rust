@@ -6,7 +6,7 @@ use axum::{
 };
 use rusqlite::{Connection, Result};
 use serde::Serialize;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
 use tokio::net::TcpListener;
 use axum::serve;
@@ -40,8 +40,10 @@ fn carregar_produtos(conn: &Connection) -> Result<HashMap<String, Produto>> {
 }
 
 fn recomendar_por_nome(mapa: &HashMap<String, Produto>, termo: &str) -> Vec<Produto> {
+    let termo_normalizado = termo.to_lowercase();
+
     mapa.iter()
-        .filter(|(nome, _)| nome.to_lowercase().contains(&termo.to_lowercase()))
+        .filter(|(nome, _)| nome.to_lowercase().contains(&termo_normalizado))
         .map(|(_, produto)| produto.clone())
         .take(4)
         .collect()
@@ -50,8 +52,7 @@ fn recomendar_por_nome(mapa: &HashMap<String, Produto>, termo: &str) -> Vec<Prod
 fn recomendar_por_categoria(mapa: &HashMap<String, Produto>, termo: &str) -> Vec<Produto> {
     let termo_normalizado = termo.to_lowercase();
 
-    // Verifica se o termo é uma categoria conhecida
-    let categorias: std::collections::HashSet<String> = mapa
+    let categorias: HashSet<String> = mapa
         .values()
         .map(|p| p.categoria.to_lowercase())
         .collect();
@@ -65,8 +66,7 @@ fn recomendar_por_categoria(mapa: &HashMap<String, Produto>, termo: &str) -> Vec
             .collect();
     }
 
-    // Se não for uma categoria, tenta encontrar um produto com esse nome
-    if let Some(produto) = mapa.get(&termo) {
+    if let Some(produto) = mapa.get(&termo[..]) {
         return mapa
             .values()
             .filter(|p| p.categoria == produto.categoria && p.nome != produto.nome)
@@ -79,14 +79,11 @@ fn recomendar_por_categoria(mapa: &HashMap<String, Produto>, termo: &str) -> Vec
 }
 
 
-
 async fn recomendar(Path(termo): Path<String>, mapa: Arc<HashMap<String, Produto>>) -> Json<Vec<Produto>> {
     let mut recomendados = recomendar_por_nome(&mapa, &termo);
 
     if recomendados.is_empty() {
-        if let Some(produto) = mapa.get(&termo) {
-            recomendados = recomendar_por_categoria(&mapa, &produto.categoria);
-        }
+        recomendados = recomendar_por_categoria(&mapa, &termo);
     }
 
     Json(recomendados)
