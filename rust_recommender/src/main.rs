@@ -5,19 +5,16 @@ use axum::{
     Router,
 };
 use rusqlite::{Connection, Result};
-use serde::Serialize;
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::net::TcpListener;
 use axum::serve;
 
-#[derive(Debug, Clone, Serialize)]
-struct Produto {
-    id: i32,
-    nome: String,
-    categoria: String,
-    preco: f64,
-}
+use rust_recommender::{
+    Produto, GrafoSimilaridade,
+    construir_grafo, recomendar_por_grafo,
+    recomendar_por_nome, recomendar_por_categoria,
+};
 
 fn carregar_produtos(conn: &Connection) -> Result<HashMap<String, Produto>> {
     let mut stmt = conn.prepare("SELECT id, nome, categoria, preco FROM produtos")?;
@@ -39,51 +36,19 @@ fn carregar_produtos(conn: &Connection) -> Result<HashMap<String, Produto>> {
     Ok(mapa)
 }
 
-fn recomendar_por_nome(mapa: &HashMap<String, Produto>, termo: &str) -> Vec<Produto> {
-    let termo_normalizado = termo.to_lowercase();
-
-    mapa.iter()
-        .filter(|(nome, _)| nome.to_lowercase().contains(&termo_normalizado))
-        .map(|(_, produto)| produto.clone())
-        .take(4)
-        .collect()
-}
-
-fn recomendar_por_categoria(mapa: &HashMap<String, Produto>, termo: &str) -> Vec<Produto> {
-    let termo_normalizado = termo.to_lowercase();
-
-    let categorias: HashSet<String> = mapa
-        .values()
-        .map(|p| p.categoria.to_lowercase())
-        .collect();
-
-    if categorias.contains(&termo_normalizado) {
-        return mapa
-            .values()
-            .filter(|p| p.categoria.to_lowercase() == termo_normalizado)
-            .cloned()
-            .take(4)
-            .collect();
-    }
-
-    if let Some(produto) = mapa.get(&termo[..]) {
-        return mapa
-            .values()
-            .filter(|p| p.categoria == produto.categoria && p.nome != produto.nome)
-            .cloned()
-            .take(4)
-            .collect();
-    }
-
-    vec![]
-}
-
-
-async fn recomendar(Path(termo): Path<String>, mapa: Arc<HashMap<String, Produto>>) -> Json<Vec<Produto>> {
+async fn recomendar(
+    Path(termo): Path<String>,
+    mapa: Arc<HashMap<String, Produto>>,
+    grafo: Arc<GrafoSimilaridade>,
+) -> Json<Vec<Produto>> {
     let mut recomendados = recomendar_por_nome(&mapa, &termo);
 
     if recomendados.is_empty() {
         recomendados = recomendar_por_categoria(&mapa, &termo);
+    }
+
+    if recomendados.is_empty() {
+        recomendados = recomendar_por_grafo(&grafo, &mapa, &termo);
     }
 
     Json(recomendados)
@@ -92,12 +57,17 @@ async fn recomendar(Path(termo): Path<String>, mapa: Arc<HashMap<String, Produto
 #[tokio::main]
 async fn main() {
     let conn = Connection::open("../instance/database.db").expect("Erro ao abrir o banco");
-    let mapa = Arc::new(carregar_produtos(&conn).expect("Erro ao carregar produtos"));
+    let mapa_raw = carregar_produtos(&conn).expect("Erro ao carregar produtos");
+    let grafo_raw = construir_grafo(&mapa_raw);
+
+    let mapa = Arc::new(mapa_raw);
+    let grafo = Arc::new(grafo_raw);
 
     let app = Router::new()
         .route("/recomendar/:termo", get({
             let mapa = mapa.clone();
-            move |path| recomendar(path, mapa)
+            let grafo = grafo.clone();
+            move |path| recomendar(path, mapa, grafo)
         }));
 
     let listener = TcpListener::bind("0.0.0.0:3000").await.unwrap();
